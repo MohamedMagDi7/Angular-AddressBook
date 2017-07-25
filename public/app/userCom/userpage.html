@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome {{UserName}}</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+    <link rel="stylesheet" href="w3css.css">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+    <link rel="stylesheet" href="app.css">
+    <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular/angular-local-storage.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="app.js"></script>
+    <script src="authinticate.js"></script>
+    <script src="login/login.js"></script>
+    <script src="userCom/user.js"></script>
+    <script src="About/about.js"></script>
+    <script src="ContactUs/contactus.js"></script>
+    <script src="components/version/version.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="components/version/version-directive.js"></script>
+    <script src="components/version/interpolate-filter.js"></script>
+    <script src="bower_components/jquery/jquery.js"></script>
+
+    <style>
+
+div {
+  transition: all linear 0.3s;
+  width: 100%;
+
+  top: 0;
+  left: 0;
+}
+
+.ng-hide {
+  height: 0;
+  width: 0;
+  background-color: transparent;
+  top:-200px;
+  left: 200px;
+}
+
+
+table, td ,th{
+    border: 1px solid #ddd;
+    text-align: left;
+}
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+tr:hover {background-color: #f2f2f2}
+
+th, td {
+    padding: 15px;
+}
+
+     .button {
+    background-color: gray;
+    border-radius: 14px;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.button1 {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.button2:hover {
+	color: white;
+	background-color: #555555;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+#mybody {
+                background-image:url();
+                background-color: white;
+                background-repeat: no-repeat;
+                background-size:cover;
+                }
+
+       .link{
+         cursor:pointer;
+        padding: .5em;
+        color: gray;
+        text-decoration:none;
+        text-shadow: 1px 1px 1px #555;
+        }
+
+
+.link:hover{
+color:black;
+}
+
+#link{
+padding: .5em; margin-right: 10em; color: gray; text-decoration:none;
+     text-shadow: 1px 1px 1px #555;
+}
+
+#link:hover{
+color: black;
+}
+   .delete-btn{
+        color: white;
+        background-color: #d9534f;
+        border-color: #d43f3a;
+        border-radius: 8px;
+        }
+</style>
+
+
+</head>
+
+<body  ng-controller="UserCtrl" >
+
+<div  style="height:50 px; width:100%; position:fixed; background-color:gray;" >
+    <a ng-click ="ShowContacts()" class="w3-bar-item w3-button" style="padding: 2em; ">My Contacts</a>
+    <a ng-click ="ShowAddContact()" class="w3-bar-item w3-button" style="padding: 2em; ">Add New Contact</a>
+    <a ng-click ="ShowAbout()" class="w3-bar-item w3-button" style="padding: 2em; ">About</a>
+    <a ng-click ="ShowContactus()" class="w3-bar-item w3-button" style="padding: 2em; ">ContactUS</a>
+    <a ng-click ="Logout()" class="w3-bar-item w3-button" style="padding: 2em; ">Logout</a>
+    <br>
+    <b>Welcome <strong style="color:  #4CAF50; font-weight: bold; text-shadow: 1px 1px 1px #555;">{{userdata.Userdata.UserName}}</strong></b>
+</div>
+<br><br><br><br>
+<div align="middle" ng-show="addcontactFlag" class="view-frame">
+        <br><br>
+        <h1 style="color:  #4CAF50; font-size: 28px;
+        font-weight: bold; text-shadow: 1px 1px 1px #555;">Enter new contact!</h1>
+        <br>
+        <form name="userForm" id="contact-form" ng-submit="AddContact()" novalidation>
+            <div>
+                <b>First Name    : &emsp;&emsp;</b>
+                <input type="text" name="firstname" placeholder="Enter Firstname..." ng-model="formdata.firstname" required>
+            </div>
+            <span style="color:red" ng-show="userForm.firstname.$dirty && userForm.firstname.$invalid">
+            <span ng-show="userForm.firstname.$error.required">Firstname is required!</span>
+            </span>
+            <br>
+            <div>
+                <b>Last Name    : &emsp;&emsp;</b>
+                <input type="text" name="lastname" placeholder="Enter Lastname..." ng-model="formdata.lastname" required>
+            </div>
+            <span style="color:red" ng-show="userForm.lastname.$dirty && userForm.lastname.$invalid">
+            <span ng-show="userForm.lastname.$error.required">Lastname is required!</span>
+            </span>
+            <br>
+            <div>
+                <b>Email    : &emsp;&emsp;&emsp;&emsp;</b>
+                <input type="email" name="email" placeholder="Enter Email Address..." ng-model="formdata.email" required>
+            </div>
+            <span style="color:red" ng-show="userForm.email.$dirty && userForm.email.$invalid">
+            <span ng-show="userForm.email.$error.email">Not a valid e-mail address</span>
+            <span ng-show="userForm.email.$error.required">Email is required</span>
+            </span>
+            <br>
+            <fieldset ng-repeat="phone in formdata.phones">
+                <div>
+                    <b ng-show= "!$first"> &ensp; &ensp; &ensp;&ensp; &ensp; &ensp; &ensp; </b>
+                    <b>Phonenumber    : </b>
+                    <input type="number" name="{{phone.id}}" placeholder="Enter Phone Number..." ng-model="phone.number" required>
+                    <button class="button button2" style="background-color: darkred;" ng-show="!$first" ng-click="RemoveNumberField($index)"> - </button>
+                <br ng-show="$first">
+                <br ng-show="$first">
+                </div>
+                <span style="color:red" ng-show="userForm.phone.id.$dirty && userForm.phone.id.$invalid">
+                <span ng-show="userForm.phone.id.$error.number"><strong>Not a valid Number</strong></span>
+                <span ng-show="userForm.phone.id.$error.required"><strong>PhoneNumber is required</strong></span>
+                </span>
+            </fieldset>
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+            &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;
+            <button class="button button2"   ng-click="AddNumberField()" > + </button></p><br>
+            <div style="color: red;"><strong>{{Error}}</strong></div>
+            <input input class="button button2"  value="Add Contact"  type="submit"   >
+        </form>
+</div>
+<br>
+
+<div ng-show="!addcontactFlag && !aboutFlag && !contactusFlag" class="view-frame" >
+    <table>
+        <thead>
+        <tr style="text-align: left;">
+            <th width="20%" >First Name</th>
+            <th width="20%" >Last Name</th>
+            <th width="30%" >E-mail</th>
+            <th width="20%" >Phone Number</th>
+            <th width="10%" ></th>
+        </tr>
+        </thead>
+        <tbody id="view-contacts">
+
+        <tr ng-repeat="contact in contacts" >
+            <td>{{contact.FirstName}}</td>
+            <td>{{contact.LastName}}</td>
+            <td>{{contact.Email}}</td>
+            <td> <object ng-click="loadFromMenu($parent.contact)" ng-repeat="number in contact.PhoneNumbers" > {{number}} <button class="delete-btn" ng-click=" DeleteNumber( $index , contact.Id )" >Delete</button> <br></object> </td>
+
+            <td> <button class="delete-btn" ng-click="DeleteContact(contact.Id)" >Delete</button></td>
+        </tr>
+
+
+        </tbody>
+
+
+    </table>
+</div>
+<div  ng-show="contactusFlag" class="view-frame" align="center"><contactus-view></contactus-view> </div>
+<div  ng-show="aboutFlag" class="view-frame" align="center"><about-view></about-view> </div>
+
+</body>
+
+</html>

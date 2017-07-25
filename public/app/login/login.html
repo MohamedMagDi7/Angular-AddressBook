@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp">
+<head>
+    
+    <meta charset="UTF-8">
+    <title>Please Sign In!</title>
+    
+<style>
+div {
+  transition: all linear 0.3s;
+  width: 100%;
+
+  top: 0;
+  left: 0;
+}
+
+.ng-hide {
+  height: 0;
+  width: 0;
+  background-color: transparent;
+  top:-200px;
+  left: 200px;
+}
+
+   
+ .button {
+    border-radius: 14px;
+    background-color: gray;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+
+.button1 {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.button:hover {
+	color: white;
+	background-color: #4CAF50;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}      
+
+  body {
+              background-image:url();
+                background-color: white;
+                background-repeat: no-repeat;
+                background-size:cover;
+                }
+
+        #login-form{
+        margin-top: 10em;
+        margin-left: 28em;
+        };
+
+        #login-form div{
+        text-align: center;
+        }
+
+        #login-form input{
+        margin: .5em 1em;
+        }
+
+        #error{
+        text-align: center;
+        color: red;
+        margin-top: 1em;
+        }
+    </style>
+
+
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/normalize.css">
+    <link rel="stylesheet" href="w3css.css">
+    <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
+    <link rel="stylesheet" href="app.css">
+    <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular/angular-local-storage.js"></script>
+    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="app.js"></script>
+    <script src="authinticate.js"></script>
+    <script src="userCom/user.js"></script>
+    <script src="login/login.js"></script>
+    <script src="About/about.js"></script>
+    <script src="ContactUs/contactus.js"></script>
+    <script src="components/version/version.js"></script>
+    <script src="components/version/version-directive.js"></script>
+    <script src="components/version/interpolate-filter.js"></script>
+    <script src="bower_components/jquery/jquery.js"></script>
+</head>
+<body ng-controller="LoginCtrl">
+
+<div  style="height:50 px; width:100%; position:fixed; background-color:gray;"  >
+    <a ng-click="$ctrl.ShowLogin()" class="w3-bar-item w3-button" style="padding: 2em; ">Homepage</a>
+    <a ng-click="$ctrl.ShowAbout()" class="w3-bar-item w3-button" style="padding: 2em; ">About</a>
+    <a ng-click="$ctrl.ShowContactus()" class="w3-bar-item w3-button" style="padding: 2em; ">ContactUS</a>
+</div>
+<br><br><br><br>
+
+
+<div ng-show="$ctrl.loginFlag" style="border: 1px solid #ddd; border-radius: 14px;">
+<form  id="login-form" name="$ctrl.loginForm" novalidate>
+    <div>
+        <label>User Name:</label>
+        <input type="email" name="username" placeholder="Enter Username..." ng-model="$ctrl.username" required>
+    </div>
+    <span style="color:red" ng-show="$ctrl.loginForm.username.$dirty && $ctrl.loginForm.username.$invalid">
+    <span ng-show="$ctrl.loginForm.username.$error.email">Not a valid e-mail address</span>
+    <span ng-show="$ctrl.loginForm.username.$error.required">Username is required</span>
+    </span>
+    <br>
+    <div>
+        <label>Password:</label>
+        <input type="password" name="password" placeholder="Enter Password..." ng-model="$ctrl.password" required>
+    </div>
+    <span style="color:red" ng-show="$ctrl.loginForm.password.$dirty && $ctrl.loginForm.password.$invalid">
+    <span ng-show="$ctrl.loginForm.password.$error.required">Username is required</span>
+    </span>
+    <span style= "color: red "> {{$ctrl.Error}} </span>
+    <br><br>
+    <div style="margin-left: 1em;">
+        <input class="button button2" type="submit" value="Register" name="register" ng-click="$ctrl.Register()" ng-disabled="$ctrl.loginForm.username.$dirty && $ctrl.loginForm.username.$invalid || $ctrl.loginForm.password.$dirty && $ctrl.loginForm.password.$invalid">
+        <input class="button button2" type="submit" value="Log In" name="login" ng-click="$ctrl.SignIn()" ng-disabled="$ctrl.loginForm.username.$dirty && $ctrl.loginForm.username.$invalid || $ctrl.loginForm.password.$dirty && $ctrl.loginForm.password.$invalid">
+    </div>
+
+
+</form>
+</div>
+<div ng-show="$ctrl.contactusFlag" align="center"><contactus-view></contactus-view> </div>
+<div ng-show="$ctrl.aboutFlag" align="center"><about-view></about-view> </div>
+</body>
+</html>
