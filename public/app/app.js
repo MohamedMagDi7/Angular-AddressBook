@@ -10,7 +10,9 @@ var app = angular.module('myApp', [
   'myApp.about',
   'myApp.version',
   'ngResource',
-  'LocalStorageModule'
+  'LocalStorageModule',
+  'myApp.contactResource',
+  'myApp.loginResource'
 ])
 
 app.config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
@@ -40,36 +42,4 @@ $scope.UserIn = localStorageService.get("Userin");
 
 
 });
-
-app.factory('loginResource', ["$resource", function($resource){
-        var serviceObject = {
-        attemptToLogin : function (username, password){
-        return $resource("/signin").save({}, {username: username, password: password}).$promise; //this promise will be fulfilled when the response is retrieved for this call
-        },
-        attemptToSignup : function (username, password){
-        return $resource("/register").save({}, {username: username, password: password}).$promise; //this promise will be fulfilled when the response is retrieved for this call
-        }
-        };
-        return serviceObject;
-    }]);
-
-
-app.factory('contactResource', ["$resource", function($resource){
-        var addContact = $resource('/addnewcontact', {} , {
-        Add : {method : 'POST' , headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        });
-        var serviceObject = {
-        deleteNum : function (contactId , numberId){
-            return $resource("/deletenumber").delete({contactid:contactId , contactnumber:numberId}).$promise; //this promise will be fulfilled when the response is retrieved for this call
-        },
-        deleteContact : function (contactId){
-                    return $resource("/deletecontact").delete({contactid:contactId}).$promise; //this promise will be fulfilled when the response is retrieved for this call
-        },
-        addNewContact : function (contact){
-                    console.log(contact);
-                    return addContact.Add({}, contact).$promise; //this promise will be fulfilled when the response is retrieved for this call
-        }
-        };
-        return serviceObject;
-    }]);
 

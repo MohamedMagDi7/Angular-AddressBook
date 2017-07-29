@@ -81,62 +81,47 @@ div {
     <link rel="stylesheet" href="w3css.css">
     <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
     <link rel="stylesheet" href="app.css">
-    <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-    <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-route/angular-route.js"></script>
-    <script src="bower_components/angular-resource/angular-resource.js"></script>
-    <script src="bower_components/angular/angular-local-storage.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
-    <script src="app.js"></script>
-    <script src="authinticate.js"></script>
-    <script src="userCom/user.js"></script>
-    <script src="login/login.js"></script>
-    <script src="About/about.js"></script>
-    <script src="ContactUs/contactus.js"></script>
-    <script src="components/version/version.js"></script>
-    <script src="components/version/version-directive.js"></script>
-    <script src="components/version/interpolate-filter.js"></script>
-    <script src="bower_components/jquery/jquery.js"></script>
+
 </head>
 <body ng-controller="LoginCtrl">
 
 <div  style="height:50 px; width:100%; position:fixed; background-color:gray;"  >
-    <a ng-click="$ctrl.ShowLogin()" class="w3-bar-item w3-button" style="padding: 2em; ">Homepage</a>
-    <a ng-click="$ctrl.ShowAbout()" class="w3-bar-item w3-button" style="padding: 2em; ">About</a>
-    <a ng-click="$ctrl.ShowContactus()" class="w3-bar-item w3-button" style="padding: 2em; ">ContactUS</a>
+    <a ng-click="ShowLogin()" class="w3-bar-item w3-button" style="padding: 2em; ">Homepage</a>
+    <a ng-click="ShowAbout()" class="w3-bar-item w3-button" style="padding: 2em; ">About</a>
+    <a ng-click="ShowContactus()" class="w3-bar-item w3-button" style="padding: 2em; ">ContactUS</a>
 </div>
 <br><br><br><br>
 
 
-<div ng-show="$ctrl.loginFlag" style="border: 1px solid #ddd; border-radius: 14px;">
-<form  id="login-form" name="$ctrl.loginForm" novalidate>
+<div ng-show="loginFlag" style="border: 1px solid #ddd; border-radius: 14px;">
+<form  id="login-form" name="loginForm" novalidate>
     <div>
         <label>User Name:</label>
-        <input type="email" name="username" placeholder="Enter Username..." ng-model="$ctrl.username" required>
+        <input type="email" name="username" placeholder="Enter Username..." ng-model="username" required>
     </div>
-    <span style="color:red" ng-show="$ctrl.loginForm.username.$dirty && $ctrl.loginForm.username.$invalid">
-    <span ng-show="$ctrl.loginForm.username.$error.email">Not a valid e-mail address</span>
-    <span ng-show="$ctrl.loginForm.username.$error.required">Username is required</span>
+    <span style="color:red" ng-show="loginForm.username.$dirty && loginForm.username.$invalid">
+    <span ng-show="loginForm.username.$error.email">Not a valid e-mail address</span>
+    <span ng-show="loginForm.username.$error.required">Username is required</span>
     </span>
     <br>
     <div>
         <label>Password:</label>
-        <input type="password" name="password" placeholder="Enter Password..." ng-model="$ctrl.password" required>
+        <input type="password" name="password" placeholder="Enter Password..." ng-model="password" required>
     </div>
-    <span style="color:red" ng-show="$ctrl.loginForm.password.$dirty && $ctrl.loginForm.password.$invalid">
-    <span ng-show="$ctrl.loginForm.password.$error.required">Username is required</span>
+    <span style="color:red" ng-show="loginForm.password.$dirty && loginForm.password.$invalid">
+    <span ng-show="loginForm.password.$error.required">Username is required</span>
     </span>
-    <span style= "color: red "> {{$ctrl.Error}} </span>
+    <span style= "color: red "> {{Error}} </span>
     <br><br>
     <div style="margin-left: 1em;">
-        <input class="button button2" type="submit" value="Register" name="register" ng-click="$ctrl.Register()" ng-disabled="$ctrl.loginForm.username.$dirty && $ctrl.loginForm.username.$invalid || $ctrl.loginForm.password.$dirty && $ctrl.loginForm.password.$invalid">
-        <input class="button button2" type="submit" value="Log In" name="login" ng-click="$ctrl.SignIn()" ng-disabled="$ctrl.loginForm.username.$dirty && $ctrl.loginForm.username.$invalid || $ctrl.loginForm.password.$dirty && $ctrl.loginForm.password.$invalid">
+        <input class="button button2" type="submit" value="Register" name="register" ng-click="Register()" ng-disabled="loginForm.username.$dirty && loginForm.username.$invalid || loginForm.password.$dirty && loginForm.password.$invalid">
+        <input class="button button2" type="submit" value="Log In" name="login" ng-click="SignIn()" ng-disabled="loginForm.username.$dirty && loginForm.username.$invalid || loginForm.password.$dirty && loginForm.password.$invalid">
     </div>
 
 
 </form>
 </div>
-<div ng-show="$ctrl.contactusFlag" align="center"><contactus-view></contactus-view> </div>
-<div ng-show="$ctrl.aboutFlag" align="center"><about-view></about-view> </div>
+<div ng-show="contactusFlag" align="center"><contactus-view></contactus-view> </div>
+<div ng-show="aboutFlag" align="center"><about-view></about-view> </div>
 </body>
 </html>

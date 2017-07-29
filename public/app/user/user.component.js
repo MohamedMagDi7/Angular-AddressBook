@@ -3,14 +3,14 @@
 *
 * Description
 */
-var app = angular.module('myApp.user', ['ngRoute' , 'LocalStorageModule' , 'ngAnimate'] )
+var userModule = angular.module('myApp.user')
 
-app.component('userView', {
-        templateUrl: 'userCom/userpage.html',
+userModule.component('userView', {
+        templateUrl: 'user/user.html',
         controller: 'UserCtrl'
       });
 
-app.controller('UserCtrl',  function UserCtrl ($scope , $http , $location ,contactResource , localStorageService){
+userModule.controller('UserCtrl',  function UserCtrl ($scope , $http , $location ,contactResource , localStorageService){
 
  $scope.contactFlag = true ;
  $scope.userdata = localStorageService.get("Userdata");
@@ -151,7 +151,7 @@ $scope.AddContact = function(){
                                   {
                                   $scope.contacts = [];
                                   }
-                                  $scope.contacts.push(response.data);
+                                  $scope.contacts.push(response);
                                   $scope.AfterSubmit();
                                   return;
                                   }
