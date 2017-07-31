@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"github.com/gocql/gocql"
-	. "Angular-Revel-App/app/models"
+	"Angular-Revel-App/app/models"
 	"Angular-Revel-App/app"
 )
 
@@ -17,19 +17,20 @@ type User struct {
 }
 
 func (user *User) GetUser() revel.Result {
-	response := Responseobject{In : true }
-	Username := user.Session["user"]
-	if Username == "" {
+	response := models.Responseobject{In : true }
+	username := user.Session["user"]
+	if username == "" {
 		return user.RenderJSON(response)
 
 	}
-	myuser := UserContancts{UserName:Username}
+	myuser := models.User{}
+	myuser.Logins.Username = username
 	err := myuser.GetUserContacts(app.DB)
 	if err != nil {
 		response.Error="DB error"
 		return user.RenderJSON(response)
 
-	}else{	
+	}else{
 		response.Userdata=myuser
 		return user.RenderJSON(response)
 	}
@@ -38,7 +39,7 @@ func (user *User) GetUser() revel.Result {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 func (user *User) AddNewContact() revel.Result{
 
-	errorResponse := ErrorResponse{Error:""}
+	errorResponse := models.ErrorResponse{Error:""}
 
 	firstname:= user.Params.Get("firstname");
 	lastname := user.Params.Get("lastname");
@@ -78,7 +79,7 @@ func (user *User) AddNewContact() revel.Result{
 			errorResponse.Error=err.Error()
 			return user.RenderJSON(errorResponse)
 		}
-		c := ContactModel{
+		c := models.ContactModel{
 			FirstName:firstname,
 			LastName:lastname,
 			Email:email,
@@ -102,8 +103,10 @@ func (user User) Delete() revel.Result {
 	if user.Validation.HasErrors() {
 		return user.RenderJSON("Internal Server Error")
 	} else {
-		myuser := UserContancts{UserName:user.Session["user"]}
-		err := myuser.DeleteContact(user.Params.Get("contactid") , app.DB)
+		myuser := models.User{}
+		myuser.Logins.Username =user.Session["user"]
+		contact := models.ContactModel{}
+		err := contact.DeleteContact(user.Params.Get("contactid") ,myuser.Logins.Username, app.DB)
 		if err != nil {
 			return user.RenderJSON("DB Error")
 		}
@@ -118,8 +121,10 @@ func (user User) DeleteNum() revel.Result{
 	if user.Validation.HasErrors() {
 		return user.RenderJSON("Internal Server Error")
 	} else {
-		myuser := &UserContancts{UserName:user.Session["user"]}
-		err := myuser.DeleteContactNumber(user.Params.Get("contactnumber") , user.Params.Get("contactid") , app.DB)
+		myuser := models.User{}
+		myuser.Logins.Username =user.Session["user"]
+		contact := models.ContactModel{}
+		err := contact.DeleteContactNumber(user.Params.Get("contactnumber") , user.Params.Get("contactid"),myuser.Logins.Username,  app.DB)
 		if err != nil {
 			return user.RenderJSON("DB Error")
 		}
@@ -130,7 +135,7 @@ func (user User) DeleteNum() revel.Result{
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 func (user User) Logout() revel.Result{
 	user.Session["user"] = ""
-	response := LogoutResponse{Error :"" , LoggedOut:true}
+	response := models.LogoutResponse{Error :"" , LoggedOut:true}
 
 	return user.RenderJSON(response)
 }

@@ -162,13 +162,13 @@ func main() {
 	
 	revel.DefaultValidationKeys = map[string]map[int]string{ 
 		"Angular-Revel-App/app/controllers.(*User).AddNewContact": { 
-			57: "firstname",
-			58: "lastname",
-			59: "email",
-			60: "firstname",
-			61: "lastname",
-			62: "email",
-			68: "email",
+			58: "firstname",
+			59: "lastname",
+			60: "email",
+			61: "firstname",
+			62: "lastname",
+			63: "email",
+			69: "email",
 		},
 	}
 	testing.TestSuites = []interface{}{ 

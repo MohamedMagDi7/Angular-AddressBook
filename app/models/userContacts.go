@@ -1,45 +1,71 @@
 package models
 
-import "github.com/gocql/gocql"
+import (
+	"github.com/gocql/gocql"
+	"fmt"
+)
 
-type UserContancts struct {
-			    //User data model struct
-	UserName string
+type Responseobject struct {
+	In bool
+	Error string
+	Userdata User
+}
+
+type ErrorResponse struct {
+	//response struct to send to the front end when error happens
+	Error string
+}
+
+type LogoutResponse struct {
+	//response struct to send to the front end when logout is requested
+	Error string
+	LoggedOut bool
+}
+
+type LoginData struct{
+	Username string
 	Password string
-	Contacts []Contact  //List of user contacts
+}
+type User struct {
+	Logins LoginData
+	Contacts []Contact
 
 }
 
-func (Currentuser * UserContancts) DeleteContact(id string,db *gocql.Session) error{
-	//delete contact with given contactid from the DB
-	err := db.Query("delete from user_data where username = ? and contact_id = ?",Currentuser.UserName , id).Exec()
+func (user * User) CheckUsernameExists(db* gocql.Session) error{
+	var databasePassword string
+
+	err := db.Query("SELECT password FROM user_logins WHERE username=?", user.Logins.Username).Scan( &databasePassword)
+	fmt.Println(err)
+	return err
+}
+
+func (user * User) QueryUser(db * gocql.Session) (string,error){
+	var databasePassword string
+
+	err := db.Query("SELECT password FROM user_logins WHERE username=?", user.Logins.Username).Scan( &databasePassword)
+	return databasePassword,err
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+func (user * User) InsertUser(hashedPassword []byte , db * gocql.Session) error{
+	err :=db.Query("INSERT INTO user_logins(username, password) VALUES(?, ?)", user.Logins.Username, hashedPassword).Exec()
 	return err
 
 }
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-func (currentuser * UserContancts) DeleteContactNumber(id string , contactid string,db *gocql.Session) error{
-	//delete number with given contactid and numberid from the DB
-	err := db.Query("delete contact_phonenumbers[?] from user_data where username = ? and contact_id = ?",id ,currentuser.UserName , contactid ).Exec()
-	return err
 
-}
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-func (currentuser * UserContancts) GetUserContacts( db *gocql.Session) (error){
-	var c ContactModel
-	//Get user data with given user name from DB
-	rows := db.Query("select contact_id,contact_email,contact_fname,contact_lname,contact_phonenumbers from user_data where username= ?" , currentuser.UserName)
+func (user * User) GetUserContacts( db *gocql.Session) error{
+	var newcontact Contact
+	rows := db.Query("select contact_id,contact_email,contact_fname,contact_lname,contact_phonenumbers from user_data where username= ?" , user.Logins.Username)
 	scanner :=rows.Iter().Scanner()
 	for scanner.Next(){
-		scanner.Scan(&c.Id , &c.Email, &c.FirstName , &c.LastName , &c.PhoneNumbers)
-		var contact Contact
-		contact.Id = c.Id
-		contact.PhoneNumbers = c.PhoneNumbers
-		contact.LastName = c.LastName
-		contact.FirstName = c.FirstName
-		contact.Email = c.Email
-		currentuser.Contacts = append(currentuser.Contacts, contact)
+		scanner.Scan(&newcontact.Id , &newcontact.Email, &newcontact.FirstName , &newcontact.LastName , &newcontact.PhoneNumbers)
+		user.Contacts = append(user.Contacts, newcontact)
 	}
 	err := rows.Iter().Close()
-
 	return err
+}
+
+func (user * User) AddtoContacts(contact  Contact) {
+	user.Contacts = append(user.Contacts, contact)
+	return
 }

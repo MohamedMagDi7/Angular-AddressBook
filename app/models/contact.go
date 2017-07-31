@@ -1,18 +1,9 @@
 package models
 
-import "github.com/gocql/gocql"
-
-
-type ErrorResponse struct {
-	//response struct to send to the front end when error happens
-	Error string
-}
-
-type LogoutResponse struct {
-	//response struct to send to the front end when logout is requested
-	Error string
-	LoggedOut bool
-}
+import (
+	"github.com/gocql/gocql"
+	"fmt"
+)
 
 
 type ContactResponse struct{
@@ -50,5 +41,19 @@ func (contact * ContactModel) InsertNewContact(username string ,db *gocql.Sessio
 		return err
 	}
 	return  nil
+
+}
+
+
+func (contact  * ContactModel) DeleteContact(id string ,username string , db *gocql.Session) error{
+	err := db.Query("delete from user_data where username = ? and contact_id = ?", username, id).Exec()
+	fmt.Println(err)
+	return err
+
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+func (contact  * ContactModel) DeleteContactNumber(id string , contactid string ,username string, db *gocql.Session) error{
+	err := db.Query("delete contact_phonenumbers[?] from user_data where username = ? and contact_id = ?",id ,username, contactid ).Exec()
+	return err
 
 }

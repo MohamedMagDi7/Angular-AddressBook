@@ -2,12 +2,11 @@ package controllers
 
 import (
 	"github.com/revel/revel"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"golang.org/x/crypto/bcrypt"
 	"github.com/gocql/gocql"
-	."Angular-Revel-App/app/models"
 	"Angular-Revel-App/app"
+	"Angular-Revel-App/app/models"
 )
 
 type App struct {
@@ -26,12 +25,12 @@ func (c App) Index() revel.Result {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 func (c App) Signin() revel.Result{
-	var userLogins UserLogins
-	c.Params.Bind(&userLogins , "UserLogins")
-	fmt.Println(userLogins)
-		response := Responseobject{In: false , Error:"" , Userdata:UserContancts{}}
+	var user models.User
+	c.Params.Bind(&user.Logins , "UserLogins")
+
+		response := models.Responseobject{In: false , Error:"" , Userdata:models.User{}}
 		var databasePassword string
-		databasePassword, err := userLogins.QueryUser(app.DB)
+		databasePassword, err := user.QueryUser(app.DB)
 		if err == gocql.ErrNotFound {
 			//no such user
 			response.Error ="Username doesn't exist"
@@ -44,7 +43,7 @@ func (c App) Signin() revel.Result{
 			return c.RenderJSON(response)
 		}
 
-		err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(userLogins.Password))
+		err = bcrypt.CompareHashAndPassword([]byte(databasePassword), []byte(user.Logins.Password))
 		// If wrong password redirect to the login
 		if  err != nil {
 			//Wrong Password
@@ -52,17 +51,17 @@ func (c App) Signin() revel.Result{
 			return c.RenderJSON(response)
 		} else {
 			// If the login succeeded
-			c.Session["user"]= userLogins.Username
+			c.Session["user"]= user.Logins.Username
 			response.In = true
 			return c.Redirect("/user")
 		}
 	}
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 func (c App) Signup() revel.Result{
-	var userLogins UserLogins
-	c.Params.Bind(&userLogins , "userLogins")
-	response := Responseobject{In: false , Error:"" , Userdata:UserContancts{}}
-	err :=userLogins.CheckUsernameExists(app.DB)
+	var user models.User
+	c.Params.Bind(&user.Logins , "userLogins")
+	response := models.Responseobject{In: false , Error:"" , Userdata:models.User{}}
+	err :=user.CheckUsernameExists(app.DB)
 	switch {
 	case err == nil:
 		response.Error = "Please choose a different username"
@@ -70,18 +69,18 @@ func (c App) Signup() revel.Result{
 
 	case err == gocql.ErrNotFound :
 			// Username is available
-			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(userLogins.Password), bcrypt.DefaultCost)
+			hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Logins.Password), bcrypt.DefaultCost)
 			if err != nil {
 				response.Error ="This Password is Not premitted"
 				return c.RenderJSON( response )
 			}
 
-			err = userLogins.InsertUser(hashedPassword , app.DB)
+			err = user.InsertUser(hashedPassword , app.DB)
 			if err != nil {
 				response.Error=err.Error()
 				return c.RenderJSON(response)
 			}
-			c.Session["user"]= userLogins.Username
+			c.Session["user"]= user.Logins.Username
 			response.In=true
 			return c.Redirect("/user")
 
