@@ -14,7 +14,6 @@ contactResourceModule.factory('contactResource', ["$resource", function($resourc
                     return $resource("/deletecontact").delete({contactid:contactId}).$promise; //this promise will be fulfilled when the response is retrieved for this call
         },
         addNewContact : function (contact){
-                    console.log(contact);
                     return addContact.Add({}, contact).$promise; //this promise will be fulfilled when the response is retrieved for this call
         }
         };

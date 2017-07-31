@@ -21,7 +21,7 @@ $scope.Error = "";
 $scope.SignIn = function(){
 	if($scope.loginForm.$valid)
 	{
-		loginResource.attemptToLogin($scope.username , $scope.password).
+		loginResource.attemptToLogin($("#login-form").serialize()).
 		then(
 		function mySuccess(response) {
            $scope.userdata = response;
