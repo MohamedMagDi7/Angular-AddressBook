@@ -11,7 +11,7 @@ loginModule.component('loginView', {
       });
 
 
-loginModule.controller('LoginCtrl',  function LoginCtrl ($scope, $http , $location , localStorageService , loginResource ){
+loginModule.controller('LoginCtrl',  function LoginCtrl ($scope, $location , localStorageService , loginResource ){
 
 $scope.loginFlag = true;
 $scope.aboutFlag = false;

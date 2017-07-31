@@ -10,7 +10,7 @@ userModule.component('userView', {
         controller: 'UserCtrl'
       });
 
-userModule.controller('UserCtrl',  function UserCtrl ($scope , $http , $location ,contactResource , localStorageService){
+userModule.controller('UserCtrl',  function UserCtrl ($scope , $location ,contactResource , localStorageService){
 
  $scope.contactFlag = true ;
  $scope.userdata = localStorageService.get("Userdata");
